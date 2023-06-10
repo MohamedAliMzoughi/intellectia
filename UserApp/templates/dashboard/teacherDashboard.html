@@ -1,0 +1,365 @@
+{% extends 'base/base.html' %} 
+{% load static %}
+
+{% block content %}
+<style>
+    #quizTable {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    #quizTable td, #quizTable th {
+      padding: 8px;
+    }
+    #classeTable{text-align: center;}
+    #studentTable{text-align: center;}
+    #classeTable tr:hover {background-color: #ddd; cursor: pointer;}
+
+    #studentTable tr:hover {background-color: #ddd; cursor: pointer;}
+
+    #tdQuizTable tr:nth-child(even){background-color: #f2f2f2;}
+    #tdQuizTable tr:hover{background-color: #ddd;}
+
+    #quizTable th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: center;
+      color: white;
+    }
+    .pagination {
+      display: inline-block;
+    }
+    .pagination a {
+      color: black;
+      float: left;
+      padding: 8px 16px;
+      text-decoration: none;
+      transition: background-color .3s;
+      border: 1px solid #ddd;
+      margin: 0 4px;
+    }
+    .pagination a.active {
+      background-color: #4CAF50;
+      color: white;
+      border: 1px solid #4CAF50;
+    }
+    .pagination a:hover:not(.active) {background-color: #ddd;}
+
+    #quizTable{
+        text-align: center;
+    }
+    #insideTable{
+        text-align: left;
+    }
+
+  </style>
+
+    <div class="container-fluid mt-5">
+        <!--  Row 1 -->
+        <div class="row">
+            <div class="col-lg-12 d-flex align-items-strech">
+                <div class="card w-100">
+                <div class="card-body">
+                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                        <div class="mb-3 mb-sm-0">
+                            <h5 class="card-title fw-semibold">Statistics</h5>
+                        </div>
+                    </div>
+                    <div id="chart"> </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 d-flex align-items-stretch mt-5">
+                <div class="card w-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-semibold mb-4">Classes</h5>
+                    <table id="classeTable" class="table">
+                        <thead>
+                        <tr>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">Grade</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">Classe name</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">Number of students</h6>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for classe,number in classes.items %}
+                            <tr class="classeClickable">
+                                <td>
+                                    {% if classe.level == '1' %}
+                                        {{classe.level}}st grade
+                                    {% elif classe.level == '2' %}
+                                        {{classe.level}}nd grade
+                                    {% elif classe.level == '3' %}
+                                        {{classe.level}}rd grade
+                                    {% else %}
+                                        {{classe.level}}th grade
+                                    {% endif %}
+                                    
+                                </td>
+                                <td>
+                                    {{classe.designiation}}
+                                </td>
+                                <td>
+                                    {{number}}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex align-items-stretch mt-5">
+                <div class="card w-100">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-semibold mb-4">Students</h5>
+                        <div id="studentTable"><center><u>Click on a classe to display students list</u></center></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 d-flex align-items-stretch mt-5">
+                <div class="card w-100">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-semibold mb-4">Quizs</h5>
+                        <div id="quizTable"><center><u>Click on a student to display quiz list</u></center></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+<script>
+    // Get all table rows with the "clickable-row" class
+const CourseRows = document.querySelectorAll('.classeClickable');
+// Add click event listener to each table row
+CourseRows.forEach(row => {
+  const tableContainer = document.getElementById('studentTable');
+  row.addEventListener('click', () => {
+    // Create a new table element
+    const newTable = document.createElement('table');
+    newTable.classList.add('table');
+    const tableHead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    headers = ['Firstname','Lastname','Gender','Phone Number','Matricule']
+    for(let i=0; i<=headers.length; i++){
+        const header1 = document.createElement('th');
+        header1.classList.add('border-bottom-0')
+        const h6 = document.createElement('h6')
+        h6.classList.add('fw-semibold');
+        h6.textContent = headers[i]
+        header1.appendChild(h6);
+        headerRow.appendChild(header1);
+    }
+    tableHead.appendChild(headerRow);
+    newTable.appendChild(tableHead);
+    students = JSON.parse('{{ students|escapejs }}');
+    filter = row.getElementsByTagName('td')[1].innerText
+    students = JSON.parse(students[filter])
+    // Create the table rows and cells
+    for(let i=0; i<students.length;i++){
+        const newRow = document.createElement('tr');
+        newRow.classList.add('studentClickable');
+        const firstname = document.createElement('td');
+        firstname.textContent = students[i].firstname;
+        newRow.appendChild(firstname);
+
+        const lastname = document.createElement('td');
+        lastname.textContent = students[i].lastname;
+        newRow.appendChild(lastname);
+
+        const gender = document.createElement('td');
+        if(students[i].gender == 1){
+            gender.textContent = 'Male';
+        }else{
+            gender.textContent = 'Female';
+        }
+        newRow.appendChild(gender);
+
+        const phoneNumber = document.createElement('td');
+        phoneNumber.textContent = students[i].phoneNumber;
+        newRow.appendChild(phoneNumber);
+
+        const matricule = document.createElement('td');
+        matricule.textContent = students[i].matricule;
+        newRow.appendChild(matricule);
+        newTable.appendChild(newRow);
+        
+    }
+    // Clear the container and append the new table
+    tableContainer.innerHTML = '';
+    tableContainer.appendChild(newTable);
+
+    const studentRows = document.querySelectorAll('.studentClickable');
+    studentRows.forEach(row => {
+        const tableContainer = document.getElementById('quizTable');
+        row.addEventListener('click', ()=>{
+            // Create a new table element
+            const newTable = document.createElement('table');
+            newTable.classList.add('table');
+            const tableHead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+
+            headers = ['Student','Quiz','Note','Date']
+            for(let i=0; i<=headers.length; i++){
+                const header1 = document.createElement('th');
+                header1.classList.add('border-bottom-0')
+                const h6 = document.createElement('h6')
+                if(i == 1){
+                    h6.id = 'quizNumber'
+                }
+                h6.classList.add('fw-semibold');
+                h6.textContent = headers[i]
+                header1.appendChild(h6);
+                headerRow.appendChild(header1);
+            }
+            tableHead.appendChild(headerRow);
+            newTable.appendChild(tableHead);
+
+            quizs = JSON.parse('{{ quizs|escapejs }}');
+            filter = row.getElementsByTagName('td')[0].innerText+''+row.getElementsByTagName('td')[1].innerText
+            console.log(filter)
+            console.log(quizs)
+            quizs = JSON.parse(quizs[filter])
+            console.log(quizs)
+            for(let i=0; i<quizs.length;i++){
+                const newRow = document.createElement('tr');
+                newRow.classList.add('mainTable')
+                const student = document.createElement('td');
+                student.textContent = row.getElementsByTagName('td')[0].innerText+' '+row.getElementsByTagName('td')[1].innerText
+                newRow.appendChild(student);
+
+
+                const quiz = document.createElement('td');
+                //
+                const quizTable = document.createElement('table');
+                quizTable.classList.add('table');
+                quizTable.id = 'tdQuizTable'
+                const tableHead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+
+                headers = ['Questions','Type','Answers','Status']
+                for(let j=0; j<=headers.length; j++){
+                    const header1 = document.createElement('th');
+                    header1.classList.add('border-bottom-0')
+                    const h6 = document.createElement('h6')
+                    h6.classList.add('fw-semibold');
+                    h6.textContent = headers[j]
+                    header1.appendChild(h6);
+                    headerRow.appendChild(header1);
+                }
+                tableHead.appendChild(headerRow);
+                quizTable.appendChild(tableHead);
+                for(let x=0; x<5; x++){
+                    const quizRow = document.createElement('tr')
+
+                    const question = document.createElement('td');
+                    question.textContent = quizs[i].questions[x]
+                    quizRow.appendChild(question);
+
+                    const type = document.createElement('td');
+                    type.textContent = quizs[i].types[x]
+                    quizRow.appendChild(type);
+
+                    const answer = document.createElement('td');
+                    answer.textContent = quizs[i].answers[x]
+                    quizRow.appendChild(answer);
+
+                    const correct = document.createElement('td');
+                    if(quizs[i].correctAnswers[x] == quizs[i].answers[x]){
+                        var iconElement = document.createElement('i');
+                        iconElement.className = 'fa fa-check';
+                        iconElement.setAttribute('aria-hidden', 'true');
+                        correct.appendChild(iconElement)
+                    }else{
+                        var iconElement = document.createElement('i');
+                        iconElement.className = 'fa fa-times';
+                        iconElement.setAttribute('aria-hidden', 'true');
+                        correct.appendChild(iconElement)
+                    }
+                    
+                    quizRow.appendChild(correct);
+                    quizTable.appendChild(quizRow);
+                }
+                //
+                quiz.appendChild(quizTable);
+                newRow.appendChild(quiz);
+                
+                const note = document.createElement('td');
+                note.textContent = quizs[i].note+'/10'
+                newRow.appendChild(note);
+
+                const date = document.createElement('td');
+                var localDate = new Date(quizs[i].date)
+                var options = { dateStyle: 'long', timeStyle: 'short' };
+                date.textContent = localDate.toLocaleString('en-US', options)
+                newRow.appendChild(date);
+
+
+                newTable.appendChild(newRow);
+            }
+            tableContainer.innerHTML = '';
+            tableContainer.appendChild(newTable);
+
+            var paginationDiv = document.createElement('div');
+            paginationDiv.id = 'pagination';
+            paginationDiv.className = 'pagination';
+
+            var parentElement = document.getElementById('quizTable');
+            parentElement.appendChild(paginationDiv);
+
+            function paginateTable(currentPage) {
+                var rowsPerPage = 1; // Number of rows to display per page
+                var table = document.getElementById("quizTable");
+                var rows = document.getElementsByClassName('mainTable');
+                // Calculate the total number of pages
+                var totalPages = Math.ceil((rows.length) / rowsPerPage);
+                // Calculate the start and end index of the rows to be displayed
+                var startIndex = (currentPage - 1) * rowsPerPage + 1;
+                var endIndex = startIndex + rowsPerPage - 1;
+                // Hide all rows except the header
+                for (var i = 0; i < rows.length; i++) {
+                    rows[i].style.display = "none";
+                }
+                rows[currentPage-1].style.display = "table-row";
+                quizNum = document.getElementById("quizNumber")
+                quizNum.innerText = 'Quiz ' + currentPage
+
+            // Generate pagination links
+                var paginationDiv = document.getElementById("pagination");
+                paginationDiv.innerHTML = "";
+
+                for (var k = 1; k <= totalPages; k++) {
+                    var link = document.createElement("a");
+                    link.href = "javascript:void(0);";
+                    link.innerText = k;
+                    link.addEventListener("click", function () {
+                        paginateTable(parseInt(this.innerText));
+                    });
+
+                    if (k === currentPage) {
+                        link.className = "active";
+                    }
+
+                    paginationDiv.appendChild(link);
+                }
+            }
+
+            // Initialize pagination with the first page
+            paginateTable(1);
+        });
+    });
+
+  });
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'base/base.html' %} 
+
+{% block content %}
+<script>
+  function togglePasswordVisibility(id) {
+      var passwordField = document.getElementById(id);
+      if (passwordField.type === "password") {
+        passwordField.type = "text";
+      } else {
+        passwordField.type = "password";
+      }
+    }
+</script>
+<style>
+  .password {
+      padding-right: 30px;
+    }
+    .password-icon {
+      position: relative;
+    }
+    .password-icon i {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+    }
+</style>
+
+  {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+  {% endif %}
+<div class="col-md-6 mx-auto mt-5">
+    <div class="card border-0">
+      <div class="card-body rounded-bottom bg-primary p-5">
+        <form action=".", method="POST">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-6 col-12">
+                  <div class="form-group">
+                      <label for="exampleInputExpirationDate"><strong>FISRTNAME</strong></label>
+                      <input
+                        type="text"
+                        class="form-control border-0 p-4"
+                        placeholder="Firstname"
+                        required="required"
+                        name="firstname"
+                      />
+                  </div>
+              </div>
+              <div class="col-md-6 col-12">
+                  <div class="form-group">
+                      <label for="exampleInputCvcCode"><strong>LASTNAME</strong></label>
+                      <input
+                        type="text"
+                        class="form-control border-0 p-4"
+                        placeholder="Lastname"
+                        required="required"
+                        name="lastname"
+                      />
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-12">
+                  <div class="form-group">
+                      <label for="exampleInputExpirationDate"><strong>PHONE NUMBER</strong></label>
+                      <input
+                        type="number"
+                        id="only-digits"
+                        class="form-control border-0 p-4"
+                        placeholder="Phone Number"
+                        required="required"
+                        name="phoneNumber"
+                      />
+                  </div>
+              </div>
+              <div class="col-md-6 col-12">
+                  <div class="form-group">
+                      <label for="exampleInputCvcCode"><strong>BIRTHDATE</strong></label>
+                      <input
+                        type="date"
+                        class="form-control border-0 p-4"
+                        placeholder="Birth date"
+                        required="required"
+                        name="birthdate"
+                      />
+                  </div>
+              </div>
+            </div>
+            <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control border-0 p-4"
+                  placeholder="Adress"
+                  required="required"
+                  name="adress"
+                />
+            </div>
+            <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control border-0 p-4"
+                  placeholder="Username"
+                  required="required"
+                  name="username"
+                />
+            </div>
+            <div class="form-group">
+              <div class="password-icon">
+                <input
+                id="password"
+                type="password"
+                class="form-control border-0 p-4"
+                placeholder="Password"
+                required="required"
+                name="password"
+              />
+                <button type="button" style="background-color: transparent;border: 0px; right: 20px;" onclick="togglePasswordVisibility('password')"><i class="fa-sharp fa-solid fa-eye"></i></button>
+              </div>              
+            <div class="form-group">
+              <div class="password-icon">
+                <input
+                  id="confirmPass"
+                  type="password"
+                  class="form-control border-0 p-4 password"
+                  placeholder="Confirm password"
+                  required="required"
+                  name="confirmPass"
+                />
+                <button type="button" style="background-color: transparent;border: 0px; right: 20px;" onclick="togglePasswordVisibility('confirmPass')"><i class="fa-sharp fa-solid fa-eye"></i></button>
+              </div>
+            </div>
+            <div class="form-group justify-content-center">
+                <input type="radio" id="m" name="gender" value="male" required>
+                <label for="m">Male</label>
+                <input type="radio" id="f" name="gender" value="female">
+                <label for="f">Female</label>
+            </div>
+            <div>
+              <button
+                class="btn btn-secondary btn-block border-0 py-3 w-75 mx-auto"
+                type="submit"
+              >
+                Next
+              </button>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

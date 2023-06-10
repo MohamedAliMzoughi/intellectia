@@ -1,0 +1,73 @@
+{% extends 'base/base.html' %} 
+
+{% load static %}
+
+{% block content %}
+<style>
+    .img-container {
+        width: 1020px;
+        height: 640px;  
+        padding: 50px;
+    }
+    #text-input{
+        min-height: 100px;
+        max-height: 300px;
+    }
+
+    #record{
+        background-color: transparent;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+    }
+</style>
+<!-- End CSS block-->
+
+    <div class="row mt-5 ml-5 mr-4">
+        <div class="col-lg-9 mb-5">
+             <video width="920" height="640" controls>
+                <source src="{% static video_path %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="col-lg-3 mb-5 p-3 my-5">
+            <form action="." method="post" enctype="multipart/form-data" id="myForm">
+                {% csrf_token %}
+                <select class="form-select mb-4" id="language" name="language">
+                    <option value="en">English</option>
+                    <option value="fr">French</option>
+                    <option value="ar">Arabic</option>
+                    <!-- Add more options for other languages -->
+                </select>
+                <div class="input-group mb-3">
+                    
+                <textarea id="text-input" class="form-control" name="problem" rows="7" id="problem" placeholder="Write your problem here...">{{ recognized_text }}</textarea>
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <button type="button" id="record" name="speechtotext"value="audio"><i class="fa-solid fa-microphone" style="font-size:18px; color: #000000;"></i></button>
+                        
+
+                    </span>
+                </div>
+            </div>
+                <center>
+                    <div id="sound-clip" name="audio"></div>
+                </center>
+                <hr>
+               
+                <input type="file" name="image" class="form-control form-control-sm mt-2 mb-2" accept="image/*">
+                <center><button type="submit" class="btn btn-primary w-50 pb-2 pt-2 mt-2" name="action" value="Upload">Upload</button></center>
+                <hr>
+                <center><button type="submit" class="btn btn-primary w-50 pb-2 pt-2 mt-4" name="genereteImage">Generate</button></center>
+                <hr>
+                <center><button type="submit" name="action" value="genarateAnswer" class="btn btn-primary w-50 pb-2 pt-2 mt-4">Generate Answer</button></center>
+                <label>{{ problem2 }}</label>
+                <hr>
+            </form>
+        </div>
+    </div> 
+
+    <script src="{% static 'js/voiceMemo.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,353 @@
+{% extends 'base/base.html' %} 
+{% load static %}
+
+{% block content %}
+<style>
+    .question-text {
+    max-width: 100px; /* Adjust the value as needed */
+    word-wrap: normal;
+  }
+</style>
+<style>
+    #quizTable {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    #quizTable td, #quizTable th {
+      padding: 8px;
+    }
+    #insideTable tr:nth-child(even){background-color: #f2f2f2;}
+    #insideTable tr:hover {background-color: #ddd;}
+    #quizTable th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: center;
+      color: white;
+    }
+    .pagination {
+      display: inline-block;
+    }
+    .pagination a {
+      color: black;
+      float: left;
+      padding: 8px 16px;
+      text-decoration: none;
+      transition: background-color .3s;
+      border: 1px solid #ddd;
+      margin: 0 4px;
+    }
+    .pagination a.active {
+      background-color: #4CAF50;
+      color: white;
+      border: 1px solid #4CAF50;
+    }
+    .pagination a:hover:not(.active) {background-color: #ddd;}
+
+    #quizTable{
+        text-align: center;
+    }
+    #insideTable{
+        text-align: left;
+    }
+  </style>
+
+    <div class="container-fluid mt-5">
+        <!--  Row 1 -->
+        <div class="row">
+            <div class="col-lg-12 d-flex align-items-strech">
+                <div class="card w-100">
+                <div class="card-body">
+                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                        <div class="mb-3 mb-sm-0">
+                            <h5 class="card-title fw-semibold">Statistics</h5>
+                        </div>
+                    </div>
+                    <div id="chart"> <img src="{% static piechart %}" alt="Pie Chart"></div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 d-flex align-items-stretch mt-5">
+                <div class="card w-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-semibold mb-4">Quizs <h6>Quiz moyenne : {{ moyenne }}/10</h6></h5>
+                    
+                    <div class="table-responsive">
+                        <table id="quizTable" class="table">
+                            <thead>
+                            <tr>
+                                <th class="border-bottom-0">
+                                    <h6 class="fw-semibold mb-0" id="quizNumber">Quiz</h6>
+                                </th>
+                                <th class="border-bottom-0">
+                                    <h6 class="fw-semibold mb-0">Note</h6>
+                                </th>
+                                <th class="border-bottom-0">
+                                    <h6 class="fw-semibold mb-0">Date</h6>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for quiz in quizs %}
+                                <tr class="mainTable">
+                                    <td>
+                                        <table id="insideTable" class="table-light">
+                                            <thead class="text-dark fs-4">
+                                                <tr>
+                                                    <th class="border-bottom-0">
+                                                        <h6 class="fw-semibold mb-0">Questions</h6>
+                                                    </th>
+                                                    <th class="border-bottom-0">
+                                                        <h6 class="fw-semibold mb-0">Type</h6>
+                                                    </th>
+                                                    <th class="border-bottom-0">
+                                                        <h6 class="fw-semibold mb-0">Answer</h6>
+                                                    </th>
+                                                    <th class="border-bottom-0">
+                                                        <h6 class="fw-semibold mb-0">Status</h6>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tr>
+                                                <td>
+                                                    <h6>{{quiz.questions.0}}</h6>
+                                                </td>
+                                                <td>
+                                                    {{quiz.types.0}}
+                                                </td>
+                                                <td>
+                                                    {{quiz.answer.0}}
+                                                </td>
+                                                <td>
+                                                    {% if quiz.answer.0 == quiz.correctAnswers.0 %}
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    {% else %}
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h6>{{quiz.questions.1}}</h6>
+                                                </td>
+                                                <td>
+                                                    {{quiz.types.1}}
+                                                </td>
+                                                <td>
+                                                    {{quiz.answer.1}}
+                                                </td>
+                                                <td>
+                                                    {% if quiz.answer.1 == quiz.correctAnswers.1 %}
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    {% else %}
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h6>{{quiz.questions.2}}</h6>
+                                                </td>
+                                                <td>
+                                                    {{quiz.types.2}}
+                                                </td>
+                                                <td>
+                                                    {{quiz.answer.2}}
+                                                </td>
+                                                <td>
+                                                    {% if quiz.answer.2 == quiz.correctAnswers.2 %}
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    {% else %}
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h6>{{quiz.questions.3}}</h6>
+                                                </td>
+                                                <td>
+                                                    {{quiz.types.3}}
+                                                </td>
+                                                <td>
+                                                    {{quiz.answer.3}}
+                                                </td>
+                                                <td>
+                                                    {% if quiz.answer.3 == quiz.correctAnswers.3 %}
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    {% else %}
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h6>{{quiz.questions.4}}</h6>
+                                                </td>
+                                                <td>
+                                                    {{quiz.types.4}}
+                                                </td>
+                                                <td>
+                                                    {{quiz.answer.4}}
+                                                </td>
+                                                <td>
+                                                    {% if quiz.answer.4 == quiz.correctAnswers.4 %}
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    {% else %}
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        {{quiz.note}}/10
+                                    </td>
+                                    <td>
+                                        {{quiz.quizDate}}
+                                    </td>
+                                </tr> 
+                                
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div id="pagination" class="pagination"></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 d-flex align-items-stretch mt-5">
+                <div class="card w-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-semibold mb-4">Classmates</h5>
+                    <h5 class="card-title fw-semibold mb-4">Class : {{ classe.designiation }}</h5>
+                
+                    <div class="table-responsive">
+                    <table class="table text-nowrap mb-0 align-middle">
+                        <thead class="text-dark fs-4">
+                        <tr>
+                            <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Firstname</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Lastname</h6>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% if classmates %}
+                                {% for classmate in classmates %}
+                                    <tr>
+                                        <td class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-1">{{classmate.firstname}}</h6>
+                                            <!-- <span class="fw-normal">Web Designer</span> -->    
+                                        </td>
+                                        <td class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-1">{{classmate.lastname}}</h6>
+                                        </td>
+                                    </tr> 
+                                {% endfor %}   
+                            {% else %}
+                                <tr> <td>No data found </td></tr>
+                            {% endif %}     
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 d-flex align-items-stretch mt-5">
+                <div class="card w-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-semibold mb-4">Teachers</h5>
+                    <div class="table-responsive">
+                    <table class="table text-nowrap mb-0 align-middle">
+                        <thead class="text-dark fs-4">
+                        <tr>
+                            <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Firstname</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Lastname</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">Email</h6>
+                                </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% if teachers %}
+                                {% for teacher in teachers %}
+                                    <tr>
+                                        <td class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-1">{{teacher.firstname}}</h6>
+                                            <!-- <span class="fw-normal">Web Designer</span> -->    
+                                        </td>
+                                        <td class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-1">{{teacher.lastname}}</h6>
+                                        </td>
+                                        <td class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-1">{{teacher.email}}</h6>
+                                        </td>
+                                    </tr> 
+                                {% endfor %} 
+                            {% else %}       
+                                    <tr> <td>No data found</td> </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- bootstrap5 dataTables js cdn -->
+<script>
+// Function to handle pagination
+function paginateTable(currentPage) {
+    var rowsPerPage = 1; // Number of rows to display per page
+    var table = document.getElementById("quizTable");
+    var rows = document.getElementsByClassName('mainTable');
+    
+    // Calculate the total number of pages
+    var totalPages = Math.ceil((rows.length) / rowsPerPage);
+    // Calculate the start and end index of the rows to be displayed
+    var startIndex = (currentPage - 1) * rowsPerPage + 1;
+    var endIndex = startIndex + rowsPerPage - 1;
+    // Hide all rows except the header
+    for (var i = 0; i < rows.length; i++) {
+        rows[i].style.display = "none";
+    }
+    rows[currentPage-1].style.display = "table-row";
+    quizNum = document.getElementById("quizNumber")
+    quizNum.innerText = 'Quiz ' + currentPage
+
+// Generate pagination links
+    var paginationDiv = document.getElementById("pagination");
+    paginationDiv.innerHTML = "";
+
+    for (var k = 1; k <= totalPages; k++) {
+        var link = document.createElement("a");
+        link.href = "javascript:void(0);";
+        link.innerText = k;
+        link.addEventListener("click", function () {
+            paginateTable(parseInt(this.innerText));
+        });
+
+        if (k === currentPage) {
+            link.className = "active";
+        }
+
+        paginationDiv.appendChild(link);
+    }
+}
+
+// Initialize pagination with the first page
+paginateTable(1);
+</script>
+{% endblock %}

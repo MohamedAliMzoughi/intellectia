@@ -1,0 +1,174 @@
+{% extends 'base/base.html' %} 
+
+{% block content %}
+<style>
+    body {
+        background-color: #CDD6DB;
+    }
+
+    label.btn {
+        padding: 18px 60px;
+        white-space: normal;
+    }
+
+    label.btn:hover {
+        text-shadow: 0 3px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    label.btn-block {
+        text-align: left;
+        position: relative
+    }
+
+    label .btn-label {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: inline-block;
+        padding: 0 10px;
+        height: 100%
+    }
+
+    .modal-header {
+        background-color: transparent;
+        color: inherit
+    }
+
+    .modal-body {
+        max-height: 400px;
+    }
+
+    .modal-dialog {
+        position: relative;
+        min-width: 700px;
+        margin: 0.5rem;
+        pointer-events: none;
+    }
+    .modal-note {
+        min-height: 80px;
+        justify-content: center;
+        align-items: center;
+        position: inherit;
+    }
+</style>
+
+    <div class="container-fluid d-flex justify-content-center align-items-center mt-4">
+        <div class="modal-dialog">
+                <div class="modal-note">
+                    <div class="modal-content">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                {% if note >= 6 %}
+                                    <h5> Your score is: <h5 style="color: green;"> {{note}}/10 </h5></h5>
+                                {% else %}
+                                    <h5>Your score is: <h5 style="color: red;"> {{note}}/10 </h5></h5>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 name="Q{{forloop.counter}}"><u>Q.1</u> {{questions.0}}</h4>
+                        {% if answers.0 == correct.0 %}
+                            <h5 style="color:green;">2/2</h5>
+                        {% else %}
+                            <h5 style="color:red;">0/2</h5>
+                        {% endif %}
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-xs-3 5"></div>
+                        <div class="quiz" id="quiz{{forloop.counter}}" data-toggle="buttons">
+                            {% if answers.0 == correct.0 %}
+                                <label class="btn btn-success btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{correct.0}}</label>
+                            {% else %}
+                                <label class="btn btn-danger btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{answers.0}}</label>
+                                <label class="btn btn-success btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{correct.0}}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="modal-header">
+                        <h4 name="Q{{forloop.counter}}"><u>Q.2</u> {{questions.1}}</h4>
+                        {% if answers.1 == correct.1 %}
+                            <h5 style="color:green;">2/2</h5>
+                        {% else %}
+                            <h5 style="color:red;">0/2</h5>
+                        {% endif %}
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-xs-3 5"></div>
+                        <div class="quiz" id="quiz{{forloop.counter}}" data-toggle="buttons">
+                            {% if answers.1 == correct.1 %}
+                                <label class="btn btn-success btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{correct.1}}</label>
+                            {% else %}
+                                <label class="btn btn-danger btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{answers.1}}</label>
+                                <label class="btn btn-success btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{correct.1}}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="modal-header">
+                        <h4 name="Q{{forloop.counter}}"><u>Q.3</u> {{questions.2}}</h4>
+                        {% if answers.2 == correct.2 %}
+                            <h5 style="color:green;">2/2</h5>
+                        {% else %}
+                            <h5 style="color:red;">0/2</h5>
+                        {% endif %}
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-xs-3 5"></div>
+                        <div class="quiz" id="quiz{{forloop.counter}}" data-toggle="buttons">
+                            {% if answers.2 == correct.2 %}
+                                <label class="btn btn-success btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{correct.2}}</label>
+                            {% else %}
+                                <label class="btn btn-danger btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{answers.2}}</label>
+                                <label class="btn btn-success btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{correct.2}}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="modal-header">
+                        <h4 name="Q{{forloop.counter}}"><u>Q.4</u> {{questions.3}}</h4>
+                        {% if answers.3 == correct.3 %}
+                            <h5 style="color:green;">2/2</h5>
+                        {% else %}
+                            <h5 style="color:red;">0/2</h5>
+                        {% endif %}
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-xs-3 5"></div>
+                        <div class="quiz" id="quiz{{forloop.counter}}" data-toggle="buttons">
+                            {% if answers.3 == correct.3 %}
+                                <label class="btn btn-success btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{correct.3}}</label>
+                            {% else %}
+                                <label class="btn btn-danger btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{answers.3}}</label>
+                                <label class="btn btn-success btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{correct.3}}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="modal-header">
+                        <h4 name="Q{{forloop.counter}}"><u>Q.5</u> {{questions.4}}</h4>
+                        {% if answers.4 == correct.4 %}
+                            <h5 style="color:green;">2/2</h5>
+                        {% else %}
+                            <h5 style="color:red;">0/2</h5>
+                        {% endif %}
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-xs-3 5"></div>
+                        <div class="quiz" id="quiz{{forloop.counter}}" data-toggle="buttons">
+                            {% if answers.4 == correct.4 %}
+                                <label class="btn btn-success btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{correct.4}}</label>
+                            {% else %}
+                                <label class="btn btn-danger btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{answers.4}}</label>
+                                <label class="btn btn-success btn-block"></span> <input type="radio" name="{{question}}" hidden disabled>{{correct.4}}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+{% endblock %}
+
