@@ -14,7 +14,7 @@ Original file is located at
 
 def answer(problem):
   import openai
-  openai.api_key = "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"
+  openai.api_key = "sk-"
   #problem="The biking club has a goal to ride 874 miles in one month.The have biked 292 miles so far.How many more miles do they have left?"
   solution="just the right answer of this without explication" +problem
 
@@ -46,7 +46,7 @@ def answer2(problem):
 
   openai.api_key = "import openai"
 
-  openai.api_key = "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"
+  openai.api_key = "sk-"
 
  # Define the problem prompt
   #prompt = "The biking club has a goal to ride 874 miles in one month. They have biked 292 miles so far. How many more miles do they have left?"
